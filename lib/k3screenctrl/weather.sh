@@ -58,9 +58,9 @@ city_checkip=$(uci get k3screenctrl.@general[0].city_checkip 2>/dev/null)
 if [ "$city_checkip" = "1" ]; then
 	city_tmp=`cat /tmp/weather_city 2>/dev/null`
 	if [ -z "$city_tmp" ]; then
-		wan_city=`curl -s http://pv.sohu.com/cityjson | awk -F"=" '{print $2}' | sed 's/;//g'`
+		wan_city=`curl --connect-timeout 3 -s http://pv.sohu.com/cityjson | awk -F"=" '{print $2}' | sed 's/;//g'`
 		wanip=`echo $wan_city | jq ".cip" | sed 's/"//g'`
-		city_json=`curl -s http://ip.taobao.com/service/getIpInfo.php?ip=$wanip`
+		city_json=`curl --connect-timeout 3 -s http://ip.taobao.com/service/getIpInfo.php?ip=$wanip`
 		ip_city=`echo $city_json | jq ".data.city" | sed 's/"//g'`
 		ip_county=`echo $city_json | jq ".data.county" | sed 's/"//g'`
 		if [ "$ip_county" != "XX" ]; then
@@ -88,7 +88,7 @@ fi
 #get weather data
 if [ "$update_weather" = "1" ]; then
 	rm -rf /tmp/k3-weather.gz
-	wget http://wthrcdn.etouch.cn/weather_mini?city=$city -O /tmp/k3-weather.gz 2>/dev/null
+	wget -T 3 http://wthrcdn.etouch.cn/weather_mini?city=$city -O /tmp/k3-weather.gz 2>/dev/null
 	gzip -d -c /tmp/k3-weather.gz > /tmp/k3-weather.json
 fi
 
@@ -101,7 +101,7 @@ TYPE=`echo $weather_json | jq ".data.forecast[0].type" | sed 's/"//g'`
 if [ "$update_weather" = "1" ]; then
 	city_name=$(encodeurl $city)
 	rm -rf /tmp/k3-weather.json
-	wget "http://api.seniverse.com/v3/weather/now.json?key=smtq3n0ixdggurox&location=$city_name&language=zh-Hans&unit=c" -O /tmp/k3-weather.json 2>/dev/null
+	wget "http://api.seniverse.com/v3/weather/now.json?key=smtq3n0ixdggurox&location=$city_name&language=zh-Hans&unit=c" -T 3 -O /tmp/k3-weather.json 2>/dev/null
 fi
 
 weather_json=$(cat /tmp/k3-weather.json 2>/dev/null)

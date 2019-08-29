@@ -12,7 +12,8 @@ print_wifi_info() {
         if [ "x$status" == "xfalse" -a -n "` echo $device_json | jsonfilter -e \"@.interfaces[0]\"`" ]; then
             ssid=`echo $COMPLETE_STAT | jsonfilter -e "@.$ucidev.interfaces[0].config.ssid"`
             psk=`echo $COMPLETE_STAT | jsonfilter -e "@.$ucidev.interfaces[0].config.key"`
-            client_count=`iw dev $ifname station dump | grep Station | wc -l`
+            #client_count=`iw dev $ifname station dump | grep Station | wc -l`
+            client_count=`iwinfo $ifname assoclist | grep dBm | wc -l`
             enabled=1
         fi
     fi

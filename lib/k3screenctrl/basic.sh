@@ -10,17 +10,12 @@ MAC_ADDR=$(ifconfig $WAN_IFNAME | grep -oE "([0-9A-Z]{2}:){5}[0-9A-Z]{2}")
 
 CPU_TEMP=$(($(cat /sys/class/thermal/thermal_zone0/temp) / 1000))
 
-HW_VERSION_CACHE_FILE=/tmp/hw_version
-if [ -e "$HW_VERSION_CACHE_FILE" ]; then
-    HW_VERSION=$(cat $HW_VERSION_CACHE_FILE)
-else
-    HW_VERSION=$(nvram get hd_version)
-    echo $HW_VERSION > $HW_VERSION_CACHE_FILE
-fi
-
+HW_VERSION="A1"
+#${LEDE_DEVICE_REVISION:0:2}
 FW_VERSION=${DISTRIB_REVISION:0:17}
 
 echo $PRODUCT_NAME
+
 if [ $(uci get k3screenctrl.@general[0].cputemp) -eq 1 ]; then
     echo $HW_VERSION $CPU_TEMP
 else
