@@ -6,7 +6,33 @@
 
 最后使用修改自 [lean/lede](https://github.com/lean/lede) 中的编译文件[k3screenctrl_build](https://github.com/lwz322/k3screenctrl_build)编译
 
+## 屏幕界面
+
+第一屏：升级界面
+
+第二屏：型号，温度，MAC，软件版本
+
+第三屏：接口
+
+第四屏：网速以及2.4G和5G WiFi的接入客户端数量
+
+第五屏：天气，时间
+
+第六屏：WiFi信息：SSID和密码（可选隐藏）
+
+第七屏：已接入终端和网速（IPv4转发）
+
 ## En
 
 On the basic of [zxlhhyccc/Hill-98-k3screenctrl](https://github.com/zxlhhyccc/Hill-98-k3screenctrl)，added sh file from [K3 openwrt18.06.02](https://www.right.com.cn/forum/thread-466672-1-1.html)，It works fine with [lwz322/luci-app-k3screenctrl](https://github.com/lwz322/luci-app-k3screenctrl)
 [k3screenctrl_build](https://github.com/lwz322/k3screenctrl_build) modified from [lean/lede](https://github.com/lean/lede)
+
+## Screen Interface
+
+1. Update
+2. Model, Version, CPU Temp, MAC
+3. Interface
+4. Speed, WiFi (2.4G/5G client) Assicated
+5. Weather, Date and Time
+6. WiFi Info
+7. Client speed (IPv4 Forward only)
