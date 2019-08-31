@@ -4,7 +4,7 @@
 
 搭配的 luci-app 是根据固件的LuCi文件修改的 [lwz322/luci-app-k3screenctrl](https://github.com/lwz322/luci-app-k3screenctrl)
 
-最后使用修改自 [lean/lede](https://github.com/lean/lede) 中的编译文件[k3screenctrl_build](https://github.com/lwz322/k3screenctrl_build)编译
+最后使用修改自 [lean/lede](https://github.com/lean/lede) 中的编译文件 [k3screenctrl_build](https://github.com/lwz322/k3screenctrl_build) 编译
 
 ## 屏幕界面
 
@@ -31,8 +31,8 @@ On the basic of [zxlhhyccc/Hill-98-k3screenctrl](https://github.com/zxlhhyccc/Hi
 
 1. Update
 2. Model, Version, CPU Temp, MAC
-3. Interface
+3. Port
 4. Speed, WiFi (2.4G/5G client) Assicated
 5. Weather, Date and Time
-6. WiFi Info
+6. WiFi Info:SSID & Password (suppressible)
 7. Client speed (IPv4 Forward only)
