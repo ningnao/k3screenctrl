@@ -58,11 +58,10 @@ city_checkip=$(uci get k3screenctrl.@general[0].city_checkip 2>/dev/null)
 if [ "$city_checkip" = "1" ]; then
 	city_tmp=`cat /tmp/weather_city 2>/dev/null`
 	if [ -z "$city_tmp" ]; then
-		wan_city=`curl --connect-timeout 3 -s http://pv.sohu.com/cityjson | awk -F"=" '{print $2}' | sed 's/;//g'`
-		wanip=`echo $wan_city | jq ".cip" | sed 's/"//g'`
+		wanip=`curl --connect-timeout 3 -s http://pv.sohu.com/cityjson | grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}"`
 		city_json=`curl --connect-timeout 3 -s http://ip.taobao.com/service/getIpInfo.php?ip=$wanip`
-		ip_city=`echo $city_json | jq ".data.city" | sed 's/"//g'`
-		ip_county=`echo $city_json | jq ".data.county" | sed 's/"//g'`
+		ip_city=`echo $city_json | jsonfilter -e '@.data.city'`
+		ip_county=`echo $city_json | jsonfilter -e '@.data.county'`
 		if [ "$ip_county" != "XX" ]; then
 			city=`echo $ip_county`
 		else
@@ -93,8 +92,8 @@ if [ "$update_weather" = "1" ]; then
 fi
 
 weather_json=$(cat /tmp/k3-weather.json 2>/dev/null)
-WENDU=`echo $weather_json | jq ".data.wendu" | sed 's/"//g'`
-TYPE=`echo $weather_json | jq ".data.forecast[0].type" | sed 's/"//g'`
+WENDU=`echo $weather_json | jsonfilter -e  '@.data.wendu'`
+TYPE=`echo $weather_json | jsonfilter -e  '@.data.forecast[0].type'`
 
 !
 
@@ -105,8 +104,8 @@ if [ "$update_weather" = "1" ]; then
 fi
 
 weather_json=$(cat /tmp/k3-weather.json 2>/dev/null)
-WENDU=`echo $weather_json | jq ".results[0].now.temperature" | sed 's/"//g'`
-TYPE=`echo $weather_json | jq ".results[0].now.code" | sed 's/"//g'`
+WENDU=`echo $weather_json | jsonfilter -e '@.results[0].now.temperature'`
+TYPE=`echo $weather_json | jsonfilter -e '@.results[0].now.code'`
 
 #output weather data
 echo $city

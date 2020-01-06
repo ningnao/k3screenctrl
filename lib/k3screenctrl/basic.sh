@@ -17,7 +17,7 @@ FW_VERSION=${DISTRIB_REVISION:0:17}
 echo $PRODUCT_NAME
 
 if [ $(uci get k3screenctrl.@general[0].cputemp) -eq 1 ]; then
-    echo $HW_VERSION $CPU_TEMP
+    echo $HW_VERSION U:$CPU_TEMP *C
 else
     echo $HW_VERSION
 fi
