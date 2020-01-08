@@ -21,7 +21,7 @@ if [ $(uci get k3screenctrl.@general[0].showmore) -eq 1 ]; then
     echo U:$LOAD R:$((100*$used/$all))%
     used=`free | grep Mem | awk '{print$3}'`
     all=`free | grep Mem | awk '{print$2}'`
-    LOAD=`uptime | awk -F "," '{print$2}' | awk '{print$3}'`
+    LOAD=`uptime | awk -F "average:" '{print$2}' | awk -F "," '{print$1}'`
     UPTIME=`uptime | awk -F "," '{print$1}'|awk '{print"up " $3" " $4}'`
     echo U:$LOAD R:$((100*$used/$all))%
     echo $UPTIME
