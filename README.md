@@ -9,11 +9,11 @@
 其他可以参考：[lanceliao/k3screenctrl](https://github.com/lanceliao/k3screenctrl)
 
 ## 屏幕界面
-可以参考下图：
+基本情况可以参考下图：
 
 ![](https://img.vim-cn.com/19/60fc4e2bff1f25017180216244e1fafe20f608.png)
 
-新版本通过修改脚本，添加了更多信息的显示，包括：CPU温度，负载，内存，运行时间等
+另外新版本通过修改脚本，添加了更多信息的显示的选项，包括：CPU温度，负载，内存，运行时间等
 
 第一屏：升级界面
 
