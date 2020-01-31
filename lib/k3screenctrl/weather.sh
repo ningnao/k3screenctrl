@@ -67,23 +67,14 @@ if [ -z "$weather_info" ]; then
 	update_weather=1
 fi
 
-: << !
-#get weather data
-if [ "$update_weather" = "1" ]; then
-	rm -rf /tmp/k3-weather.gz
-	wget -T 3 http://wthrcdn.etouch.cn/weather_mini?city=$city -O /tmp/k3-weather.gz 2>/dev/null
-	gzip -d -c /tmp/k3-weather.gz > /tmp/k3-weather.json
+key=$(uci get k3screenctrl.@general[0].key 2>/dev/null)
+if [ -z "$key" ]; then
+	update_weather=0
 fi
-
-weather_json=$(cat /tmp/k3-weather.json 2>/dev/null)
-WENDU=`echo $weather_json | jsonfilter -e  '@.data.wendu'`
-TYPE=`echo $weather_json | jsonfilter -e  '@.data.forecast[0].type'`
-
-!
 
 if [ "$update_weather" = "1" ]; then
 	rm -rf /tmp/k3-weather.json
-	wget "http://api.seniverse.com/v3/weather/now.json?key=smtq3n0ixdggurox&location=$city&language=zh-Hans&unit=c" -T 3 -O /tmp/k3-weather.json 2>/dev/null
+	wget "http://api.seniverse.com/v3/weather/now.json?key=$key&location=$city&language=zh-Hans&unit=c" -T 3 -O /tmp/k3-weather.json 2>/dev/null
 fi
 
 weather_json=$(cat /tmp/k3-weather.json 2>/dev/null)
