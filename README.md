@@ -8,6 +8,12 @@
 
 其他的有效信息可以参考：[lanceliao/k3screenctrl](https://github.com/lanceliao/k3screenctrl)
 
+**2020.1.31 天气API的问题**：[已知的一个致命问题](https://www.right.com.cn/forum/thread-2068254-1-1.html)
+> 屏幕会隔三差五的睡死，睡死时候，网路会出异常，变得非常慢，检查系统日志，会发现k3screenctrl大量的错误信息。硬重启后恢复正常。软重启无法激活屏幕。
+> 所有带k3screenctrl的固件都有睡死问题，据说是天气API导致的。但是也有人说一切正常，所以真实原因，自己刷了才知道
+
+考虑到作为路由器还是要稳定性优先的，所以尽可能排除不稳定因素，参考了下[ K3 OpenWrt固件（更新日期 2020.1.30）](https://www.right.com.cn/forum/thread-2512521-1-1.html)，决定本仓库的代码默认不再自带天气的私钥，默认不再开启天气更新（更新间隔设置为0，脚本不运行），有需求可以自行申请[心知天气](https://www.seniverse.com/)的API或者下载已经提供了API Key的固件；
+
 ## 屏幕界面
 基本情况可以参考下图：
 
@@ -33,7 +39,6 @@
 ## 已知问题
 
 - 部分设备的屏幕在使用本软件后无法正常显示界面，可能是屏幕本身的固件版本较低
-- 天气API有访问频率限额，不过现在用的人太多了，偶尔天气无法查询，如果有需求可以自行申请API；脚本中使用的天气API来自[心知天气](https://www.seniverse.com/)，手机号即可申请免费版，得到私钥后，于`/lib/k3screenctrl/weather.sh`中替换`smtq3n0ixdggurox`
 - 依靠IP定位偶尔可能无法定位到准确的城市，进而无法自动查询天气，建议关闭IP定位，指定城市即可
 - WiFi信息部分的访客网络信息，OpenWrt官方没有访客网络的APP，也就没有标准一说，脚本中的设置貌似不适合添加SSID访客网络的做法
 - 在开启硬件转发加速（HWNAT或者offload）的情况下，iptable无法统计流量

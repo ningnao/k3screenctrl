@@ -11,6 +11,24 @@ if [ -z "$update_time" ]; then
 	update_time=3600
 fi
 
+DATE=$(date "+%Y-%m-%d %H:%M")
+DATE_DATE=$(echo $DATE | awk '{print $1}')
+DATE_TIME=$(echo $DATE | awk '{print $2}')
+DATE_WEEK=$(date "+%u")
+if [ "$DATE_WEEK" == "7" ]; then
+	DATE_WEEK=0
+fi
+
+if [ "$update_time" -eq 0 ]; then
+	echo "OFF"$city
+	echo $WENDU
+	echo $DATE_DATE
+	echo $DATE_TIME
+	echo $TYPE
+	echo $DATE_WEEK
+	echo 0
+	exit
+fi
 
 cur_time=`date +%s`
 last_time=`cat /tmp/weather_time 2>/dev/null`
@@ -22,22 +40,11 @@ else
 	if [ $time_tmp -ge $update_time ]; then
 		update_weather=1
 		echo $cur_time > /tmp/weather_time
-	fi	
+	fi
 fi
-
-
-DATE=$(date "+%Y-%m-%d %H:%M")
-DATE_DATE=$(echo $DATE | awk '{print $1}')
-DATE_TIME=$(echo $DATE | awk '{print $2}')
-DATE_WEEK=$(date "+%u")
-if [ "$DATE_WEEK" == "7" ]; then
-	DATE_WEEK=0
-fi
-
 
 city_checkip=0
 city_checkip=$(uci get k3screenctrl.@general[0].city_checkip 2>/dev/null)
-
 
 if [ "$city_checkip" = "1" ]; then
 	city_tmp=`cat /tmp/weather_city 2>/dev/null`
