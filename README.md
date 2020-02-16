@@ -49,6 +49,21 @@
 - WiFi信息部分的访客网络信息，OpenWrt官方没有访客网络的APP，也就没有标准一说，脚本中的设置貌似不适合添加SSID访客网络的做法
 - 在开启硬件转发加速（HWNAT或者offload）的情况下，iptable无法统计流量
 
+## SDK编译
+因为在k3screenctrl的Makefile文件中有对机型的要求的倚赖，所以使用SDK单独编译k3screenctrl时，k3screenctrl不会被编译
+
+具体也就是k3screenctrl_build文件中的DEPENDS：
+```makefile
+define Package/k3screenctrl
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=@TARGET_bcm53xx_DEVICE_phicomm-k3 +@KERNEL_DEVMEM +coreutils +coreutils-od +bash +curl
+  TITLE:=LCD screen controller on PHICOMM K3
+  URL:=https://github.com/lwz322/k3screenctrl.git
+endef
+```
+解决办法：去掉depends中的```=@TARGET_bcm53xx_DEVICE_phicomm-k3 +@KERNEL_DEVMEM ```
+
 ## 可以公开的情报
 
 最早要追溯到2017年updateing的[【测试】K3 的 LEDE（更新部分屏幕支持）](https://koolshare.cn/thread-91998-1-1.html)，最主要的是逆向做出了[k3screenctrl](https://github.com/updateing/k3screenctrl)，使得屏幕显示有了开源支持；另外作者在2019年也更新了屏幕固件更新的代码，[CCluv/k3screenctrl](https://github.com/CCluv/k3screenctrl)提供了屏幕固件的文件
