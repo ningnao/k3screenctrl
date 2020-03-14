@@ -91,7 +91,7 @@ if [ -s /tmp/arp_refresh_time ]; then
 		echo ${#online_list[@]} > /tmp/lan_online_list.temp
 		for ((i=0;i<${#online_list[@]};i++))
 		do
-			arp -d ${online_list[i]}
+			#arp -d ${online_list[i]}
 			echo "${hostname[i]}" >> /tmp/lan_online_list.temp
 			echo "${dw_sp[i]}" >> /tmp/lan_online_list.temp
 			echo "${up_sp[i]}" >> /tmp/lan_online_list.temp

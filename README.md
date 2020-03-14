@@ -6,6 +6,14 @@
 
 最后使用修改自 [lean/lede](https://github.com/lean/lede) 中的编译文件 [k3screenctrl_build](https://github.com/lwz322/k3screenctrl_build) 编译
 
+**2020.3.14 睡死问题的修复进展** ：[尝试修复屏幕驱动睡死的问题](https://www.right.com.cn/forum/thread-3174657-1-1.html)对睡死问题在逐步跟进和修复，修复这个问题或许就差几个反馈
+
+具体进展可见于[likanchen/k3screenctrl](https://github.com/likanchen/k3screenctrl)，编译固件时也可以尝试替换，希望有这方面问题的同学可以积极测试和反馈，一起完善K3的OpenWrt
+
+**2020.3.13 脚本arp命令报错** ：对[报错](https://www.right.com.cn/forum/forum.php?mod=redirect&goto=findpost&ptid=729670&pid=8029524)，调查了下应该是历史遗留问题
+
+OpenWrt早先时候（k3screenctrl的开发时间是2017年）的arp命令对应一个程序，现在版本只是定义在/etc/profile的一个函数，即登陆shell的环境变量中的函数，故单独运行脚本就会报错，然而这个不影响k3screenctrl的正常输出，理论上注释也不影响
+
 **2020.2.15 屏幕睡死问题**：总算是接到反馈，亲眼见到了屏幕睡死的表现
 - 黑屏，触摸无响应
 - 进程并没有被终止（也就不是靠添加守护进程就能解决）
