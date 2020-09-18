@@ -6,6 +6,8 @@
 
 最后使用修改自 [lean/lede](https://github.com/lean/lede) 中的编译文件 [k3screenctrl_build](https://github.com/lwz322/k3screenctrl_build) 编译
 
+**2020.9.17 TARGET依赖导致menuconfig不显示的兼容** ：详见[k3screenctrl_build](https://github.com/lwz322/k3screenctrl_build)的README
+
 **2020.3.14 睡死问题的修复进展** ：[尝试修复屏幕驱动睡死的问题](https://www.right.com.cn/forum/thread-3174657-1-1.html)对睡死问题在逐步跟进和修复，修复这个问题或许就差几个反馈
 
 具体进展可见于[likanchen/k3screenctrl](https://github.com/likanchen/k3screenctrl)，编译固件时也可以尝试替换，希望有这方面问题的同学可以积极测试和反馈，一起完善K3的OpenWrt
