@@ -8,14 +8,14 @@ arp_ip=($(grep "br-lan" /proc/net/arp | awk '{print $1}'))
 
 uci show k3screenctrl > /tmp/k3_custom
 
-if [ -z "$(nft list chain inet fw4 forward | grep UPSP)" -a -z "$(nft list chain inet fw4 forward | grep DWSP)" ]; then
+if [ -z "$(nft list chain inet fw4 forward | grep UPSP)"] && [ -z "$(nft list chain inet fw4 forward | grep DWSP)" ]; then
 	nft add chain inet fw4 UPSP
 	nft add chain inet fw4 DWSP
 	mkdir /tmp/lan_speed
 fi
 for ((i=0;i<${#arp_ip[@]};i++))
 do
-	if [ -z "$(nft list chain inet fw4 forward | grep DWSP | grep ${arp_ip[i]} -w)" -a -z "$(nft list chain inet fw4 forward | grep UPSP | grep ${arp_ip[i]} -w)" ]; then
+	if [ -z "$(nft list chain inet fw4 forward | grep DWSP | grep ${arp_ip[i]} -w)"] && [ -z "$(nft list chain inet fw4 forward | grep UPSP | grep ${arp_ip[i]} -w)" ]; then
 		nft insert rule inet fw4 forward ip saddr ${arp_ip[i]} counter jump UPSP
 		nft insert rule inet fw4 forward ip daddr ${arp_ip[i]} counter jump DWSP
 		echo $(date +%s) > /tmp/lan_speed/${arp_ip[i]}
