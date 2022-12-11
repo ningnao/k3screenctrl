@@ -94,6 +94,7 @@ if [[ "$time_arrived" = "1" || "$conf_changed" = "1" ]]; then
 	expr `date +%s` + $update_interval > $weather_time_path
 fi
 
+# 解析数据
 if [ -n "$weather_json" ]; then
 
 	# 判断响应是否正确
