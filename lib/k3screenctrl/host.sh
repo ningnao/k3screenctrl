@@ -8,16 +8,16 @@ arp_ip=($(grep "br-lan" /proc/net/arp | awk '{print $1}'))
 
 uci show k3screenctrl > /tmp/k3_custom
 
-if [ -z "$(iptables --list | grep UPSP)" -a -z "$(iptables --list | grep DWSP)" ]; then
-	iptables -N UPSP
-	iptables -N DWSP
+if [ -z "$(nft list chain inet fw4 forward | grep UPSP)" -a -z "$(nft list chain inet fw4 forward | grep DWSP)" ]; then
+	nft add chain inet fw4 UPSP
+	nft add chain inet fw4 DWSP
 	mkdir /tmp/lan_speed
 fi
 for ((i=0;i<${#arp_ip[@]};i++))
 do
-	if [ -z "$(iptables -nvx -L FORWARD | grep DWSP | grep ${arp_ip[i]} -w)" -a -z "$(iptables -nvx -L FORWARD | grep UPSP | grep ${arp_ip[i]} -w)" ]; then
-		iptables -I FORWARD 1 -s ${arp_ip[i]} -j UPSP
-		iptables -I FORWARD 1 -d ${arp_ip[i]} -j DWSP
+	if [ -z "$(nft list chain inet fw4 forward | grep DWSP | grep ${arp_ip[i]} -w)" -a -z "$(nft list chain inet fw4 forward | grep UPSP | grep ${arp_ip[i]} -w)" ]; then
+		nft insert rule inet fw4 forward ip saddr ${arp_ip[i]} counter jump UPSP
+		nft insert rule inet fw4 forward ip daddr ${arp_ip[i]} counter jump DWSP
 		echo $(date +%s) > /tmp/lan_speed/${arp_ip[i]}
 		echo 0 >> /tmp/lan_speed/${arp_ip[i]}
 		echo 0 >> /tmp/lan_speed/${arp_ip[i]}
@@ -50,8 +50,8 @@ do
 	last_speed_up=$(cut -d$'\n' -f,2 /tmp/lan_speed/${online_list[i]})
 	last_speed_dw=$(cut -d$'\n' -f,3 /tmp/lan_speed/${online_list[i]})
 	now_speed_time=$(date +%s)
-	now_speed_up=$(iptables -nvx -L FORWARD | grep UPSP | grep ${online_list[i]} -w  | awk '{print $2}')
-	now_speed_dw=$(iptables -nvx -L FORWARD | grep DWSP | grep ${online_list[i]} -w  | awk '{print $2}')
+	now_speed_up=$(nft list chain inet fw4 forward | grep UPSP | grep ${online_list[i]} -w  | awk '{print $6}')
+	now_speed_dw=$(nft list chain inet fw4 forward | grep DWSP | grep ${online_list[i]} -w  | awk '{print $6}')
 
 	if [ -z "${last_speed_time}" ]; then
 		last_speed_time=0
