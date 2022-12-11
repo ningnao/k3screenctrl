@@ -99,11 +99,14 @@ if [ -n "$weather_json" ]; then
 
 	# 判断响应是否正确
 	error_status=`echo $weather_json | jsonfilter -e '@.status'`
-	error_msg=${api_error_map[`echo $weather_json | jsonfilter -e '@.status_code'`]}
-	if [ -n "$error_msg" ]; then
-		show_error "$error_msg"
-	elif [ -n "$error_status" ]; then
-		show_error "$error_status"
+	# 修复 api_error_map 数组 bad array subscript 报错
+	if [ "$error_status" == "Failed to parse json data: quoted object property name expected" ]; then
+		error_msg=${api_error_map[`echo $weather_json | jsonfilter -e '@.status_code'`]}
+		if [ -n "$error_msg" ]; then
+			show_error "$error_msg"
+		elif [ -n "$error_status" ]; then
+			show_error "$error_status"
+		fi
 	fi
 	
 	# 获取实际地理位置
