@@ -50,8 +50,8 @@ do
 	last_speed_up=$(cut -d$'\n' -f,2 /tmp/lan_speed/${online_list[i]})
 	last_speed_dw=$(cut -d$'\n' -f,3 /tmp/lan_speed/${online_list[i]})
 	now_speed_time=$(date +%s)
-	now_speed_up=$(nft list chain inet fw4 forward | grep UPSP | grep ${online_list[i]} -w  | awk '{print $6}')
-	now_speed_dw=$(nft list chain inet fw4 forward | grep DWSP | grep ${online_list[i]} -w  | awk '{print $6}')
+	now_speed_up=$(nft list chain inet fw4 forward | grep UPSP | grep ${online_list[i]} -w  | awk '{print $8}')
+	now_speed_dw=$(nft list chain inet fw4 forward | grep DWSP | grep ${online_list[i]} -w  | awk '{print $8}')
 
 	if [ -z "${last_speed_time}" ]; then
 		last_speed_time=0
