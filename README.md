@@ -1,5 +1,8 @@
 ## 简介
 
+**2022.12.12 修复新版本Openwrt有部分数据获取不到的问题** Openwrt 22.02 版本之后，vlan改用DSA，原本的swconfig不可用，修改了wan.sh，更换成当前可用的获取方式； 新版本中，nftable替代iptable，因此修改host.sh，改用新的方式创建防火墙规则，但目前似乎执行速度略慢于之前方案，同时，wan口速度虽然修改后可以正确获取，却无法正确的显示在屏幕上。
+
+***************************
 在 [zxlhhyccc/Hill-98-k3screenctrl](https://github.com/zxlhhyccc/Hill-98-k3screenctrl) 已经给K3屏幕开启了7屏的基础上，使用 [K3 openwrt18.06.02](https://www.right.com.cn/forum/thread-466672-1-1.html) 固件中的```/lib/k3screenctrl/```下的sh文件做了替换
 
 搭配的 luci-app 是根据固件的LuCi文件修改的 [lwz322/luci-app-k3screenctrl](https://github.com/lwz322/luci-app-k3screenctrl)
