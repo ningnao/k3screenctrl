@@ -6,16 +6,18 @@ mac_online_list=($(grep -v "0x0" /proc/net/arp | grep "br-lan" |awk '{print $4}'
 
 arp_ip=($(grep "br-lan" /proc/net/arp | awk '{print $1}'))
 
+nft_list=`nft list chain inet fw4 forward`
+
 uci show k3screenctrl > /tmp/k3_custom
 
-if [ -z "$(nft list chain inet fw4 forward | grep UPSP)"] && [ -z "$(nft list chain inet fw4 forward | grep DWSP)" ]; then
+if [ -z "`echo $nft_list | grep UPSP`" ] && [ -z "`echo $nft_list | grep DWSP`" ]; then
 	nft add chain inet fw4 UPSP
 	nft add chain inet fw4 DWSP
 	mkdir /tmp/lan_speed
 fi
 for ((i=0;i<${#arp_ip[@]};i++))
 do
-	if [ -z "$(nft list chain inet fw4 forward | grep DWSP | grep ${arp_ip[i]} -w)"] && [ -z "$(nft list chain inet fw4 forward | grep UPSP | grep ${arp_ip[i]} -w)" ]; then
+	if [ -z "`echo $nft_list | grep UPSP | grep ${arp_ip[i]} -w`" ] && [ -z "`echo $nft_list | grep DWSP | grep ${arp_ip[i]} -w`" ]; then
 		nft insert rule inet fw4 forward ip saddr ${arp_ip[i]} counter jump UPSP
 		nft insert rule inet fw4 forward ip daddr ${arp_ip[i]} counter jump DWSP
 		echo $(date +%s) > /tmp/lan_speed/${arp_ip[i]}
@@ -50,9 +52,8 @@ do
 	last_speed_up=$(cut -d$'\n' -f,2 /tmp/lan_speed/${online_list[i]})
 	last_speed_dw=$(cut -d$'\n' -f,3 /tmp/lan_speed/${online_list[i]})
 	now_speed_time=$(date +%s)
-	now_speed_up=$(nft list chain inet fw4 forward | grep UPSP | grep ${online_list[i]} -w  | awk '{print $8}')
-	now_speed_dw=$(nft list chain inet fw4 forward | grep DWSP | grep ${online_list[i]} -w  | awk '{print $8}')
-
+	now_speed_up=$(echo "$nft_list" | grep UPSP | grep ${online_list[i]} -w  | awk '{print $8}')
+	now_speed_dw=$(echo "$nft_list" | grep DWSP | grep ${online_list[i]} -w  | awk '{print $8}')
 	if [ -z "${last_speed_time}" ]; then
 		last_speed_time=0
 	fi
