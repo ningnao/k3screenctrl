@@ -8,7 +8,7 @@ arp_ip=($(grep "br-lan" /proc/net/arp | awk '{print $1}'))
 
 nft_list=`nft list chain inet fw4 forward`
 
-uci show k3screenctrl > /tmp/k3_custom
+uci show k3screenctrl > /tmp/k3screenctrl/k3_custom
 
 if [ -z "`echo $nft_list | grep UPSP`" ] && [ -z "`echo $nft_list | grep DWSP`" ]; then
 	nft add chain inet fw4 UPSP
@@ -42,7 +42,7 @@ do
 	
 	#for k3_custom
 	tmp_mac=$(echo ${mac_online_list[i]} | tr 'a-z' 'A-Z')
-	tmp_uci=$(cat /tmp/k3_custom | grep $tmp_mac | awk -F'=' '{print $1}' | awk -F'.' '{print$1"."$2}')
+	tmp_uci=$(cat /tmp/k3screenctrl/k3_custom | grep $tmp_mac | awk -F'=' '{print $1}' | awk -F'.' '{print$1"."$2}')
 	if [ -n "$tmp_uci" ];then
 		hostname[i]=$(uci get $tmp_uci.name)
 		logo[i]=$(uci get $tmp_uci.icon)
