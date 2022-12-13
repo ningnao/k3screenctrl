@@ -1,10 +1,9 @@
 #!/bin/bash
 # Copyright (C) 2017 XiaoShan https://www.mivm.cn
 
-arp_info=`grep -v "0x0" /proc/net/arp`
-online_list=($( echo "$arp_info" | grep "br-lan" |awk '{print $1}'))
-mac_online_list=($( echo "$arp_info" | grep "br-lan" |awk '{print $4}'))
-
+arp_info=`grep "br-lan" /proc/net/arp`
+online_list=($( echo "$arp_info" |awk '{print $1}'))
+mac_online_list=($( echo "$arp_info" |awk '{print $4}'))
 arp_ip=($( echo "$arp_info" | awk '{print $1}'))
 
 nft_list=`nft list chain inet fw4 forward`
