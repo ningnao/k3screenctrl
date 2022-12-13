@@ -13,22 +13,22 @@ uci show k3screenctrl > /tmp/k3_custom
 if [ -z "`echo $nft_list | grep UPSP`" ] && [ -z "`echo $nft_list | grep DWSP`" ]; then
 	nft add chain inet fw4 UPSP
 	nft add chain inet fw4 DWSP
-	mkdir /tmp/lan_speed
+	mkdir /tmp/k3screenctrl/device_speed
 fi
 for ((i=0;i<${#arp_ip[@]};i++))
 do
 	if [ -z "`echo $nft_list | grep UPSP | grep ${arp_ip[i]} -w`" ] && [ -z "`echo $nft_list | grep DWSP | grep ${arp_ip[i]} -w`" ]; then
 		nft insert rule inet fw4 forward ip saddr ${arp_ip[i]} counter jump UPSP
 		nft insert rule inet fw4 forward ip daddr ${arp_ip[i]} counter jump DWSP
-		echo $(date +%s) > /tmp/lan_speed/${arp_ip[i]}
-		echo 0 >> /tmp/lan_speed/${arp_ip[i]}
-		echo 0 >> /tmp/lan_speed/${arp_ip[i]}
+		echo $(date +%s) > /tmp/k3screenctrl/device_speed/${arp_ip[i]}
+		echo 0 >> /tmp/k3screenctrl/device_speed/${arp_ip[i]}
+		echo 0 >> /tmp/k3screenctrl/device_speed/${arp_ip[i]}
 	fi
 done
 
-if [ -s /tmp/lan_online_list.temp ]; then
-	cat /tmp/lan_online_list.temp
-	rm /tmp/lan_online_list.temp
+if [ -s /tmp/k3screenctrl/lan_online_list.temp ]; then
+	cat /tmp/k3screenctrl/lan_online_list.temp
+	rm /tmp/k3screenctrl/lan_online_list.temp
 	exit 0
 else
 	echo ${#online_list[@]}
@@ -48,9 +48,9 @@ do
 		logo[i]=$(uci get $tmp_uci.icon)
 	fi
 
-	last_speed_time=$(cut -d$'\n' -f,1 /tmp/lan_speed/${online_list[i]})
-	last_speed_up=$(cut -d$'\n' -f,2 /tmp/lan_speed/${online_list[i]})
-	last_speed_dw=$(cut -d$'\n' -f,3 /tmp/lan_speed/${online_list[i]})
+	last_speed_time=$(cut -d$'\n' -f,1 /tmp/k3screenctrl/device_speed/${online_list[i]})
+	last_speed_up=$(cut -d$'\n' -f,2 /tmp/k3screenctrl/device_speed/${online_list[i]})
+	last_speed_dw=$(cut -d$'\n' -f,3 /tmp/k3screenctrl/device_speed/${online_list[i]})
 	now_speed_time=$(date +%s)
 	now_speed_up=$(echo "$nft_list" | grep UPSP | grep ${online_list[i]} -w  | awk '{print $8}')
 	now_speed_dw=$(echo "$nft_list" | grep DWSP | grep ${online_list[i]} -w  | awk '{print $8}')
@@ -69,9 +69,9 @@ do
 	fi
 	up_sp[i]=$((($now_speed_up - $last_speed_up) / $time_s))
 	dw_sp[i]=$((($now_speed_dw - $last_speed_dw) / $time_s))
-	echo $now_speed_time > /tmp/lan_speed/${online_list[i]}
-	echo $now_speed_up >> /tmp/lan_speed/${online_list[i]}
-	echo $now_speed_dw >> /tmp/lan_speed/${online_list[i]}
+	echo $now_speed_time > /tmp/k3screenctrl/device_speed/${online_list[i]}
+	echo $now_speed_up >> /tmp/k3screenctrl/device_speed/${online_list[i]}
+	echo $now_speed_dw >> /tmp/k3screenctrl/device_speed/${online_list[i]}
 
 	if [ -z "${hostname[i]}" -o "${hostname[i]}" = "*" ]; then
 		hostname[i]="Unknown"
@@ -86,23 +86,23 @@ do
 done
 
 now_arp_refresh_time=$(date +%s)
-if [ -s /tmp/arp_refresh_time ]; then
-	last_arp_refresh_time=$(cat /tmp/arp_refresh_time)
+if [ -s //tmp/k3screenctrl/arp_refresh_time ]; then
+	last_arp_refresh_time=$(cat //tmp/k3screenctrl/arp_refresh_time)
 	if [ $(($now_arp_refresh_time - $last_arp_refresh_time)) -ge 600 ]; then
-		echo ${#online_list[@]} > /tmp/lan_online_list.temp
+		echo ${#online_list[@]} > /tmp/k3screenctrl/lan_online_list.temp
 		for ((i=0;i<${#online_list[@]};i++))
 		do
 			#arp -d ${online_list[i]}
-			echo "${hostname[i]}" >> /tmp/lan_online_list.temp
-			echo "${dw_sp[i]}" >> /tmp/lan_online_list.temp
-			echo "${up_sp[i]}" >> /tmp/lan_online_list.temp
-			echo "${logo[i]}" >> /tmp/lan_online_list.temp
+			echo "${hostname[i]}" >> /tmp/k3screenctrl/lan_online_list.temp
+			echo "${dw_sp[i]}" >> /tmp/k3screenctrl/lan_online_list.temp
+			echo "${up_sp[i]}" >> /tmp/k3screenctrl/lan_online_list.temp
+			echo "${logo[i]}" >> /tmp/k3screenctrl/lan_online_list.temp
 		done
-		echo 0 >> /tmp/lan_online_list.temp
-		echo $now_arp_refresh_time > /tmp/arp_refresh_time
+		echo 0 >> /tmp/k3screenctrl/lan_online_list.temp
+		echo $now_arp_refresh_time > //tmp/k3screenctrl/arp_refresh_time
 	fi
 else
-	echo $now_arp_refresh_time > /tmp/arp_refresh_time
+	echo $now_arp_refresh_time > //tmp/k3screenctrl/arp_refresh_time
 fi
 
 echo 0

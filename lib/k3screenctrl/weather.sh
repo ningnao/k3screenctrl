@@ -2,9 +2,9 @@
 . /lib/network/config.sh
 . /lib/functions.sh
 
-weather_time_path=/tmp/k3_weather_time
-weather_json_path=/tmp/k3_weather_json
-weather_conf_path=/tmp/k3_weather_conf
+weather_time_path=/tmp/k3screenctrl/k3_weather_time
+weather_json_path=/tmp/k3screenctrl/k3_weather_json
+weather_conf_path=/tmp/k3screenctrl/k3_weather_conf
 
 # https://docs.seniverse.com/api/start/error.html
 declare -A api_error_map=(
