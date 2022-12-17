@@ -116,9 +116,10 @@ static int update_storage_from_script(const char *script,
      * be malformatted and the results are not reliable.
      */
     const char *stopped_at = tokenize_and_store(out, '\n', stores, store_len);
+    int ret = *stopped_at == 0 ? SUCCESS : FAILURE;
     free((void *)out);
 
-    return *stopped_at == 0 ? SUCCESS : FAILURE;
+    return ret;
 }
 
 BASIC_INFO g_basic_info;
